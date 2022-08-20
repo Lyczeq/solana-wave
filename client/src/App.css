@@ -1,7 +1,8 @@
-.App {
-  height: 100vh;
+.app {
   background-color: #1a202c;
   text-align: center;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .container {
