@@ -1,14 +1,18 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.localnet]
-solana = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+[programs.devnet]
+# localnet:
+# solana = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+# devnet:
+solana = "4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N"
+
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/lyczek/.config/solana/id.json"
 
 [scripts]
