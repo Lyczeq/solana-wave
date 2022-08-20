@@ -1,7 +1,10 @@
+import { Buffer } from 'buffer';
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import { Button } from './components/Button/Button.jsx';
 import { Waves } from './components/Waves/Waves';
+
+import './App.css';
+window.Buffer = Buffer;
 
 function App() {
   const [walletAddress, setWalletAddress] = useState('');
@@ -12,7 +15,6 @@ function App() {
 
     if (solana) {
       const response = await solana.connect();
-      console.log('Connected with Public Key:', response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
     }
   };
@@ -24,7 +26,6 @@ function App() {
       console.log(solana);
       if (solana) {
         if (solana.isPhantom) {
-          console.log('Phantom wallet found!');
           const response = await solana.connect({ onlyIfTrusted: true });
           setWalletAddress(response.publicKey.toString());
         }
@@ -44,7 +45,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="app">
       <div className={walletAddress ? 'authed-container' : 'container'}>
         <div className="header-container">
           <p className="header">👋 Solana Wave</p>
