@@ -27,7 +27,6 @@ function App() {
           console.log('Phantom wallet found!');
           const response = await solana.connect({ onlyIfTrusted: true });
           setWalletAddress(response.publicKey.toString());
-          console.log('pk', response.publicKey.toString());
         }
       } else {
         alert('Solana object not found! Get a Phantom Wallet 👻');

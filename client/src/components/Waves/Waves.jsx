@@ -20,7 +20,6 @@ export const Waves = ({ walletAddress }) => {
 
   const sendMessage = async () => {
     if (userMessage.length > 0) {
-      console.log('Gif link:', userMessage);
       setMessages([userMessage, ...messages]);
       setUserMessage('');
     } else {
