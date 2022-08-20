@@ -1,34 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import { Button } from './components/Button/Button.jsx';
+import { Waves } from './components/Waves/Waves';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [walletAddress, setWalletAddress] = useState('');
+
+  const connectWallet = async () => {
+    // @ts-ignore
+    const { solana } = window;
+
+    if (solana) {
+      const response = await solana.connect();
+      console.log('Connected with Public Key:', response.publicKey.toString());
+      setWalletAddress(response.publicKey.toString());
+    }
+  };
+
+  const checkWalletConnection = async () => {
+    try {
+      // @ts-ignore
+      const { solana } = window;
+      console.log(solana);
+      if (solana) {
+        if (solana.isPhantom) {
+          console.log('Phantom wallet found!');
+          const response = await solana.connect({ onlyIfTrusted: true });
+          setWalletAddress(response.publicKey.toString());
+        }
+      } else {
+        alert('Solana object not found! Get a Phantom Wallet 👻');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const onLoad = async () => {
+      await checkWalletConnection();
+    };
+    onLoad();
+  }, []);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className={walletAddress ? 'authed-container' : 'container'}>
+        <div className="header-container">
+          <p className="header">👋 Solana Wave</p>
+          <p className="sub-text">
+            Wave to your friends using the Solana blockchain! ✨
+          </p>
+          {!walletAddress ? (
+            <Button className="connect-wallet-button" onClick={connectWallet}>
+              Connect to Wallet
+            </Button>
+          ) : (
+            <Waves walletAddress={walletAddress} />
+          )}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
