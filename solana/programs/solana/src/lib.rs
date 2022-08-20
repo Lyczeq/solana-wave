@@ -2,7 +2,9 @@
 use anchor_lang::prelude::*;
 
 // program id, anchor generated that, info for solana how to run the program
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+// local id: Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS
+// devnet id: 4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N
+declare_id!("4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N");
 
 // everything below this line is our program, we'll create some handlers to communicate with the program
 // it's a macro that attach code to the module, it's like "inheriting" a class

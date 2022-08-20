@@ -10,4 +10,33 @@ It is required to pay for the account because storing data isn't free! Users pay
 
 Details and how rent is calculated [here](https://docs.solana.com/developing/programming-model/accounts#rent).
 
+## How to change from local to devnet?
+
+```sh
+solana config set --url devnet
+
+# Make sure you're on devnet.
+solana config get
+
+anchor build
+
+# Get the new program id.
+solana address -k target/deploy/myepicproject-keypair.json
+
+# Update Anchor.toml and lib.rs w/ new program id.
+# Make sure Anchor.toml is on devnet.
+
+# Build again.
+anchor build
+
+# Deploy
+anchor deploy
+```
+
+Running `anchor test` after a deploy, re-deploys the program and then run all the functions in the script.
+
+**Solana programs are upgreadable**. That means when we re-deploy we're updating the same program id to point to the latest version of the program we deployed. The **accounts** that programs talk to will stick around, these accounts keep data related to the program.
+
+In the Ethereum world we cannot upgrade the smart contract, we can change it but we have to deploy once again, so the address will be different.
+
 
