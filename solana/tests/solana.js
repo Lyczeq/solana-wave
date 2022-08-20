@@ -1,5 +1,18 @@
 const anchor = require('@project-serum/anchor');
 const { SystemProgram } = anchor.web3;
+const deepEqualInAnyOrder = require('deep-equal-in-any-order');
+const chai = require('chai');
+
+chai.use(deepEqualInAnyOrder);
+const { expect } = chai;
+const mockData = (wave, userAddress) => {
+  return [
+    {
+      wave,
+      userAddress,
+    },
+  ];
+};
 
 const main = async () => {
   console.log('Starting test');
@@ -31,17 +44,26 @@ const main = async () => {
   let accountData = await program.account.baseAccount.fetch(
     baseAccount.publicKey
   );
-  console.log('Waves count', accountData.totalWaves.toString());
+  expect(accountData.totalWaves.toString()).equals('0');
+
+  const waveMessage = 'abcd';
 
   // Call add_wave fn from the program
-  await program.rpc.addWave({
+  await program.rpc.addWave(waveMessage, {
     accounts: {
       baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
     },
   });
 
   accountData = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log('Waves count', accountData.totalWaves.toString());
+
+  const { wavesList, totalWaves } = accountData;
+  expect(totalWaves.toString()).equals('1');
+
+  expect(wavesList).to.deep.equalInAnyOrder(
+    mockData(waveMessage, provider.wallet.publicKey)
+  );
 };
 
 const runMain = async () => {

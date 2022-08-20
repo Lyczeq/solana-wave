@@ -23,9 +23,17 @@ pub mod solana {
         Ok(())
     }
 
-    pub fn add_wave(ctx: Context<AddWave>) -> Result<()> {
+    pub fn add_wave(ctx: Context<AddWave>, wave: String) -> Result<()> {
         // Get a reference to the account and increment total_messages.
         let base_account = &mut ctx.accounts.base_account;
+        let user = &mut ctx.accounts.user;
+
+        let new_wave = Wave {
+            wave: wave.to_string(),
+            user_address: *user.to_account_info().key,
+        };
+
+        base_account.waves_list.push(new_wave);
         base_account.total_waves += 1;
         Ok(())
     }
@@ -52,10 +60,20 @@ pub struct Initialize<'info> {
 pub struct AddWave<'info> {
     #[account(mut)] // Access to a mutable reference to base_account
     pub base_account: Account<'info, BaseAccount>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+}
+
+// It tells Anchor how to serialize/deserialize the struct. Data is stored in an "account", it's just a file and we serialize the data into a binary format before storing it.
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
+pub struct Wave {
+    pub wave: String,
+    pub user_address: Pubkey,
 }
 
 // It tells the program what kind of account it can make and what to hold inside of it. Here, BaseAccount holds one thing and it's an unsigned integer.
 #[account]
 pub struct BaseAccount {
     pub total_waves: u64,
+    pub waves_list: Vec<Wave>,
 }
