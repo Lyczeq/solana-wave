@@ -39,4 +39,6 @@ Running `anchor test` after a deploy, re-deploys the program and then run all th
 
 In the Ethereum world we cannot upgrade the smart contract, we can change it but we have to deploy once again, so the address will be different.
 
+## Client interaction with the program
 
+After a deployment, you should see the `target/idl/solana.json` file. Copy it to the root `client/src/idl.json`.
