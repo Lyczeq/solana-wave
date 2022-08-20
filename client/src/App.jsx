@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { checkWalletConnection } from './helpers';
-import { Button } from './components/Button/Button.jsx';
 import './App.css';
-
-const connectWallet = async () => {};
+import { Button } from './components/Button/Button.jsx';
+import { Waves } from './components/Waves/Waves';
 
 function App() {
-  const [walletAddress, setWalletAddress] = useState(null);
+  const [walletAddress, setWalletAddress] = useState('');
+
+  const connectWallet = async () => {
+    // @ts-ignore
+    const { solana } = window;
+
+    if (solana) {
+      const response = await solana.connect();
+      console.log('Connected with Public Key:', response.publicKey.toString());
+      setWalletAddress(response.publicKey.toString());
+    }
+  };
 
   const checkWalletConnection = async () => {
     try {
@@ -17,8 +26,9 @@ function App() {
         if (solana.isPhantom) {
           console.log('Phantom wallet found!');
           const response = await solana.connect({ onlyIfTrusted: true });
+          setWalletAddress(response.publicKey.toString());
+          console.log('pk', response.publicKey.toString());
         }
-        setWalletAddress(solana.publicKey?.toString());
       } else {
         alert('Solana object not found! Get a Phantom Wallet 👻');
       }
@@ -31,15 +41,14 @@ function App() {
     const onLoad = async () => {
       await checkWalletConnection();
     };
-    window.addEventListener('load', onLoad);
-    return () => window.removeEventListener('load', onLoad);
+    onLoad();
   }, []);
 
   return (
     <div className="App">
       <div className={walletAddress ? 'authed-container' : 'container'}>
         <div className="header-container">
-          <p className="header">🖼 Solana Wave</p>
+          <p className="header">👋 Solana Wave</p>
           <p className="sub-text">
             Wave to your friends using the Solana blockchain! ✨
           </p>
@@ -47,7 +56,9 @@ function App() {
             <Button className="connect-wallet-button" onClick={connectWallet}>
               Connect to Wallet
             </Button>
-          ) : null}
+          ) : (
+            <Waves walletAddress={walletAddress} />
+          )}
         </div>
       </div>
     </div>
