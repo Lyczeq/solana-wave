@@ -1,10 +1,11 @@
 // use works like an import, we import things from the anchor library
 use anchor_lang::prelude::*;
-
+use anchor_lang::solana_program::sysvar::clock::Clock;
 // program id, anchor generated that, info for solana how to run the program
 // local id: Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS
 // devnet id: 4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N
 declare_id!("4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N");
+// Clock::get()?.unix_timestamp
 
 // everything below this line is our program, we'll create some handlers to communicate with the program
 // it's a macro that attach code to the module, it's like "inheriting" a class
@@ -30,9 +31,12 @@ pub mod solana {
         let base_account = &mut ctx.accounts.base_account;
         let user = &mut ctx.accounts.user;
 
+        let timestamp = Clock::get().unwrap().unix_timestamp;
+
         let new_wave = Wave {
             wave: wave.to_string(),
             user_address: *user.to_account_info().key,
+            timestamp,
         };
 
         base_account.waves_list.push(new_wave);
@@ -71,6 +75,7 @@ pub struct AddWave<'info> {
 pub struct Wave {
     pub wave: String,
     pub user_address: Pubkey,
+    pub timestamp: i64,
 }
 
 // It tells the program what kind of account it can make and what to hold inside of it. Here, BaseAccount holds one thing and it's an unsigned integer.
