@@ -80,6 +80,10 @@
           {
             "name": "userAddress",
             "type": "publicKey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }
