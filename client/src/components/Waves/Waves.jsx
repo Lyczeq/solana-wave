@@ -1,11 +1,11 @@
 import { Program } from '@project-serum/anchor';
 import { PublicKey } from '@solana/web3.js';
 import copy from 'copy-to-clipboard';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { createWaveAccount, getBaseAccount, getProvider } from '../../helpers';
-import { Button } from '../Button/Button';
-
 import idl from '../../idl.json';
+import { Button } from '../Button/Button';
 import './Waves.css';
 
 let baseAccount = getBaseAccount();
@@ -68,7 +68,6 @@ export const Waves = ({ walletAddress }) => {
 
   useEffect(() => {
     if (walletAddress) {
-      
       getWavesList();
     }
   }, [walletAddress]);
@@ -86,6 +85,15 @@ export const Waves = ({ walletAddress }) => {
       </div>
     );
   }
+
+  const getDate = timestamp => {
+    try {
+      const miliseconds = Number(timestamp.toString()) * 1000;
+      return dayjs(miliseconds).format('HH:mm DD-MM-YYYY');
+    } catch {
+      return 'Undefined date';
+    }
+  };
 
   return (
     <div className="connected-container">
@@ -109,9 +117,8 @@ export const Waves = ({ walletAddress }) => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </form>
       <div className="wave-grid">
-        {(wavesList || []).map(({ userAddress, wave }) => (
+        {(wavesList || []).map(({ userAddress, wave, timestamp }) => (
           <div className="wave-item" key={wave}>
-            {console.log(userAddress)}
             <p className="user-address-heading">
               👋 Address:
               <span
@@ -123,6 +130,8 @@ export const Waves = ({ walletAddress }) => {
             </p>
             <div className="wave-content">
               <p>{wave}</p>
+              <br />
+              {getDate(timestamp)}
             </div>
           </div>
         ))}

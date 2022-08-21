@@ -23,7 +23,6 @@ function App() {
     try {
       // @ts-ignore
       const { solana } = window;
-      console.log(solana);
       if (solana) {
         if (solana.isPhantom) {
           const response = await solana.connect({ onlyIfTrusted: true });
