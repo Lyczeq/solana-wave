@@ -5,7 +5,6 @@ use anchor_lang::solana_program::sysvar::clock::Clock;
 // local id: Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS
 // devnet id: 4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N
 declare_id!("4VSzZUMRLSBqoXjepkU7ZNzN3EhPoCx4B4Au6XdQbv6N");
-// Clock::get()?.unix_timestamp
 
 // everything below this line is our program, we'll create some handlers to communicate with the program
 // it's a macro that attach code to the module, it's like "inheriting" a class
@@ -27,7 +26,6 @@ pub mod solana {
     }
 
     pub fn add_wave(ctx: Context<AddWave>, wave: String) -> Result<()> {
-        // Get a reference to the account and increment total_messages.
         let base_account = &mut ctx.accounts.base_account;
         let user = &mut ctx.accounts.user;
 

@@ -17,6 +17,7 @@ export const Waves = ({ walletAddress }) => {
   const [userMessage, setUserMessage] = useState('');
   const [wavesList, setWavesList] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+
   const handleMessageChange = event => {
     const { value } = event.target;
     setUserMessage(value);
@@ -130,8 +131,7 @@ export const Waves = ({ walletAddress }) => {
             </p>
             <div className="wave-content">
               <p>{wave}</p>
-              <br />
-              {getDate(timestamp)}
+              <p>{getDate(timestamp)}</p>
             </div>
           </div>
         ))}
